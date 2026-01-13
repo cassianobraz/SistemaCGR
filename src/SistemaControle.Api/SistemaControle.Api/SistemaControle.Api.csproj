@@ -14,4 +14,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\SistemaControle.Application\SistemaControle.Application.csproj" />
+    <ProjectReference Include="..\..\SistemaControle.Infra\SistemaControle.Infra.csproj" />
+  </ItemGroup>
+
 </Project>
