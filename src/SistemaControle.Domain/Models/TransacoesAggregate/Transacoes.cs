@@ -1,6 +1,4 @@
-﻿using SistemaControle.Domain.Models.CategoriaAggregate;
-
-namespace SistemaControle.Domain.Models.TransacoesAggregate;
+﻿namespace SistemaControle.Domain.Models.TransacoesAggregate;
 
 public class Transacoes
 {
@@ -8,21 +6,21 @@ public class Transacoes
     public string Descricao { get; private set; }
     public decimal Valor { get; private set; }
     public string Tipo { get; private set; }
-    public Categoria Categoria { get; private set; }
+    public Guid CategoriaId { get; private set; }
     public Guid PessoaId { get; private set; }
 
     protected Transacoes() { }
 
-    public Transacoes(string descricao, decimal valor, string tipo, Categoria categoria, Guid pessoaId)
+    public Transacoes(string descricao, decimal valor, string tipo, Guid categoriaId, Guid pessoaId)
     {
         Id = Guid.NewGuid();
         Descricao = descricao;
         Valor = valor;
         Tipo = tipo;
-        Categoria = categoria;
+        CategoriaId = categoriaId;
         PessoaId = pessoaId;
     }
 
-    public Transacoes Create(string descricao, decimal valor, string tipo, Categoria categoria, Guid pessoaId)
-        => new Transacoes(descricao, valor, tipo, categoria, pessoaId);
+    public Transacoes Create(string descricao, decimal valor, string tipo, Guid categoriaId, Guid pessoaId)
+        => new Transacoes(descricao, valor, tipo, categoriaId, pessoaId);
 }

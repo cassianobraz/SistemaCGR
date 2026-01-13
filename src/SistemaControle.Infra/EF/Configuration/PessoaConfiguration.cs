@@ -8,6 +8,18 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
 {
     public void Configure(EntityTypeBuilder<Pessoa> builder)
     {
-        throw new NotImplementedException();
+        builder.ToTable("pessoas");
+
+        builder.HasKey(p => p.Id);
+
+        builder.Property(p => p.Id)
+               .IsRequired();
+
+        builder.Property(p => p.Nome)
+               .IsRequired()
+               .HasMaxLength(150);
+
+        builder.Property(p => p.Idade)
+               .IsRequired();
     }
 }
