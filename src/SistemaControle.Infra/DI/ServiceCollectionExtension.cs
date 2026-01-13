@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SistemaControle.Application.Pessoa.Dtos.Requests;
 
 namespace SistemaControle.Infra.DI;
 
@@ -30,6 +31,6 @@ public static class ServiceCollectionExtension
 
     private static void AddHandlers(this IServiceCollection services)
     {
-        //services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<AuthRequestDto>());
+        services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CriarPessoaRequestDto>());
     }
 }
