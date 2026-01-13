@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SistemaControle.Domain.Model.CategoriaAggregate;
+using SistemaControle.Domain.Models.CategoriaAggregate;
 
 namespace SistemaControle.Infra.EF.Configuration;
 

@@ -1,5 +1,11 @@
-﻿namespace SistemaControle.Infra.Repository;
+﻿using SistemaControle.Domain.Models.TransacoesAggregate;
 
-public class TransacoesRepository
+namespace SistemaControle.Infra.Repository;
+
+public class TransacoesRepository : ITransacoesRepository
 {
+    public Task<IEnumerable<Transacoes>> ListarTodosAsync(CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
 }

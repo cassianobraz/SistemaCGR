@@ -59,5 +59,14 @@ namespace SistemaControle.Domain {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Descrição da categoria não pode ser nula..
+        /// </summary>
+        internal static string CGR0001 {
+            get {
+                return ResourceManager.GetString("CGR0001", resourceCulture);
+            }
+        }
     }
 }

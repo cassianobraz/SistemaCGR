@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CGR0001" xml:space="preserve">
-    <value>Erro ao criar este item</value>
+    <value>Descrição da categoria não pode ser nula.</value>
   </data>
 </root>

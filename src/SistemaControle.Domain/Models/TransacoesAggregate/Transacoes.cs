@@ -1,6 +1,6 @@
-﻿using SistemaControle.Domain.Model.CategoriaAggregate;
+﻿using SistemaControle.Domain.Models.CategoriaAggregate;
 
-namespace SistemaControle.Domain.Model.TransacoesAggregate;
+namespace SistemaControle.Domain.Models.TransacoesAggregate;
 
 public class Transacoes
 {

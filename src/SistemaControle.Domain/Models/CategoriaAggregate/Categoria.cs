@@ -1,4 +1,4 @@
-﻿namespace SistemaControle.Domain.Model.CategoriaAggregate;
+﻿namespace SistemaControle.Domain.Models.CategoriaAggregate;
 
 public class Categoria
 {
@@ -14,6 +14,6 @@ public class Categoria
         Finalidade = finalidade;
     }
 
-    public Categoria Create(string descricao, string finalidade)
+    public static Categoria Create(string descricao, string finalidade)
         => new Categoria(descricao, finalidade);
 }

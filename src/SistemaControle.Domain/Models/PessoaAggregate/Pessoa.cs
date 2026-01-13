@@ -1,4 +1,4 @@
-﻿namespace SistemaControle.Domain.Model.PessoaAggregate;
+﻿namespace SistemaControle.Domain.Models.PessoaAggregate;
 
 public class Pessoa
 {

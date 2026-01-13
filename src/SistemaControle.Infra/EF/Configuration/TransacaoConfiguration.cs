@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SistemaControle.Domain.Model.TransacoesAggregate;
+using SistemaControle.Domain.Models.TransacoesAggregate;
 
 namespace SistemaControle.Infra.EF.Configuration;
 
