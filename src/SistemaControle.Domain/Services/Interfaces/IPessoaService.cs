@@ -1,9 +1,10 @@
-﻿using SistemaControle.Domain.Models.PessoaAggregate;
+﻿using Result.Domain.Models;
+using SistemaControle.Domain.Models.PessoaAggregate;
 
 namespace SistemaControle.Domain.Services.Interfaces;
 
 public interface IPessoaService
 {
-    Task CriarAsync(Pessoa pessoa, CancellationToken ct);
-    void Excluir(Pessoa pessoa);
+    Task<ResultViewModel<bool>> CriarAsync(string nome, int idade, CancellationToken ct);
+    Task<ResultViewModel<bool>> ExcluirAsync(Guid id, CancellationToken ct);
 }

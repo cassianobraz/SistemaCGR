@@ -58,7 +58,7 @@ public class PessoaController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(List<Error>), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteId(Guid id, CancellationToken ct)
+    public async Task<IActionResult> DeletaId(Guid id, CancellationToken ct)
     {
         var request = new DeletarPessoaRequestDto { Id = id };
 

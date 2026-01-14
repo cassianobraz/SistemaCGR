@@ -8,12 +8,10 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
 {
     public void Configure(EntityTypeBuilder<Pessoa> builder)
     {
-        builder.ToTable("pessoas");
-
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.Id)
-               .IsRequired();
+            .ValueGeneratedNever();
 
         builder.Property(p => p.Nome)
                .IsRequired()

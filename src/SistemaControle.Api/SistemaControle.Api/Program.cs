@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SistemaControle.Infra.DI;
 using SistemaControle.Infra.EF.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
+builder.Services.AddServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
@@ -39,11 +42,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Fazer as migrations automaticamente ao iniciar a aplicação
-//using (var scope = app.Services.CreateScope())
-//{
-//    var service = scope.ServiceProvider;
-//    var context = service.GetRequiredService<SistemaControleContext>();
-//    context.Database.Migrate();
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider;
+    var context = service.GetRequiredService<SistemaControleContext>();
+    context.Database.Migrate();
+}
 
 app.Run();

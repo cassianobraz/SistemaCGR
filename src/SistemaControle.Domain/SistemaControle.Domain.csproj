@@ -7,10 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="Shared\Enums\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="Domain.Model" Version="1.0.0" />
 	</ItemGroup>
 
@@ -24,7 +20,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Update="Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
+			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
 	</ItemGroup>

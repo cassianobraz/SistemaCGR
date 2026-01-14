@@ -118,6 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CGR0001" xml:space="preserve">
-    <value>Descrição da categoria não pode ser nula.</value>
+    <value>A descrição da categoria é obrigatória.</value>
+  </data>
+  <data name="CGR0004" xml:space="preserve">
+    <value>A descrição da  transferencia é obrigatória.</value>
+  </data>
+  <data name="CGR0002" xml:space="preserve">
+    <value>Finalidade da categoria inválida. Valores permitidos: Despesa (1), Receita (2) ou Ambas (3).</value>
+  </data>
+  <data name="CGR0003" xml:space="preserve">
+    <value>O GUID informado não está associado a nenhuma pessoa cadastrada.</value>
+  </data>
+  <data name="CGR0005" xml:space="preserve">
+    <value>TipoTransacao da transacoes inválida. Valores permitidos: Despesa (1), Receita (2).</value>
+  </data>
+  <data name="CGR0006" xml:space="preserve">
+    <value>O valor informado deve ser maior que zero.</value>
+  </data>
+  <data name="CGR0007" xml:space="preserve">
+    <value>O GUID informado não está associado a nenhuma categoria cadastrada.</value>
+  </data>
+  <data name="CGR0008" xml:space="preserve">
+    <value>O GUID informado não está associado a nenhuma pessoa cadastrada.</value>
   </data>
 </root>

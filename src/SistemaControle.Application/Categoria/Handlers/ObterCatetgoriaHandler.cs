@@ -10,13 +10,16 @@ public class ObterCatetgoriaHandler : IRequestHandler<ObterCategoriasRequestDto,
 {
     private readonly ICategoriaRepository _categoriaRepository;
 
+    public ObterCatetgoriaHandler(ICategoriaRepository categoriaRepository)
+        => _categoriaRepository = categoriaRepository;
+
     public async Task<ResultViewModel<CategoriaResponseDto>> Handle(ObterCategoriasRequestDto request, CancellationToken ct)
     {
-        var result = await _categoriaRepository.ListarTodosAsync(ct);
+        var categorias = await _categoriaRepository.ListarTodosAsync(ct);
 
         var response = new CategoriaResponseDto
         {
-            Result = result.Select(c => new CategoriaDto
+            Result = categorias.Select(c => new CategoriaDto
             {
                 Id = c.Id,
                 Descricao = c.Descricao,

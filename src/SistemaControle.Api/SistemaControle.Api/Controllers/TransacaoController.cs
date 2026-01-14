@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Result.Domain.Enum;
 using Result.Domain.Models;
 using SistemaControle.Application.Transacoes.Dtos;
 using SistemaControle.Application.Transacoes.Dtos.Requests;
@@ -23,12 +24,18 @@ public class TransacaoController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(List<Error>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(List<Error>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Create([FromBody] CriarTranscoesRequest request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
 
         if (result.IsFailure)
+        {
+            if (result.ErrorType == TipoErro.NotFound)
+                return NotFound(result.Errors);
+
             return BadRequest(result.Errors);
+        }
 
         return NoContent();
     }

@@ -44,8 +44,6 @@ public class CategoriaController : ControllerBase
     {
         var result = await _mediator.Send(new ObterCategoriasRequestDto(), ct);
 
-        var categorias = result.Value?.Result ?? new List<CategoriaDto>();
-
-        return Ok(categorias);
+        return Ok(result.Value.Result);
     }
 }

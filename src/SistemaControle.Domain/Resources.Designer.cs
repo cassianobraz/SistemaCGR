@@ -22,7 +22,7 @@ namespace SistemaControle.Domain {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SistemaControle.Domain {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SistemaControle.Domain.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SistemaControle.Domain {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,11 +61,74 @@ namespace SistemaControle.Domain {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Descrição da categoria não pode ser nula..
+        ///   Looks up a localized string similar to A descrição da categoria é obrigatória..
         /// </summary>
-        internal static string CGR0001 {
+        public static string CGR0001 {
             get {
                 return ResourceManager.GetString("CGR0001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finalidade da categoria inválida. Valores permitidos: Despesa (1), Receita (2) ou Ambas (3)..
+        /// </summary>
+        public static string CGR0002 {
+            get {
+                return ResourceManager.GetString("CGR0002", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O GUID informado não está associado a nenhuma pessoa cadastrada..
+        /// </summary>
+        public static string CGR0003 {
+            get {
+                return ResourceManager.GetString("CGR0003", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A descrição da  transferencia é obrigatória..
+        /// </summary>
+        public static string CGR0004 {
+            get {
+                return ResourceManager.GetString("CGR0004", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TipoTransacao da transacoes inválida. Valores permitidos: Despesa (1), Receita (2)..
+        /// </summary>
+        public static string CGR0005 {
+            get {
+                return ResourceManager.GetString("CGR0005", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O valor informado deve ser maior que zero..
+        /// </summary>
+        public static string CGR0006 {
+            get {
+                return ResourceManager.GetString("CGR0006", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O GUID informado não está associado a nenhuma categoria cadastrada..
+        /// </summary>
+        public static string CGR0007 {
+            get {
+                return ResourceManager.GetString("CGR0007", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O GUID informado não está associado a nenhuma pessoa cadastrada..
+        /// </summary>
+        public static string CGR0008 {
+            get {
+                return ResourceManager.GetString("CGR0008", resourceCulture);
             }
         }
     }
