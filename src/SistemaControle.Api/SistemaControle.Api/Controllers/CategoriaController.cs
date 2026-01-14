@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Result.Domain.Models;
-using SistemaControle.Application.Categoria;
+using SistemaControle.Application.Categoria.Dtos;
 using SistemaControle.Application.Categoria.Dtos.Requests;
 
 namespace SistemaControle.Api.Controllers;

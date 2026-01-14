@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Result.Domain.Models;
+using SistemaControle.Application.Categoria.Dtos;
 using SistemaControle.Application.Categoria.Dtos.Requests;
 using SistemaControle.Application.Categoria.Dtos.Responses;
 using SistemaControle.Domain.Models.CategoriaAggregate;
