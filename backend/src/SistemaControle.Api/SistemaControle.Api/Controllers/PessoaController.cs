@@ -35,7 +35,7 @@ public class PessoaController : ControllerBase
     /// <param name="ct"></param>
     /// <returns></returns>
     [HttpGet("totais-pessoas")]
-    [ProducesResponseType(typeof(List<ConsultaTotaisPorPessoaDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ConsultaTotaisPorPessoaDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetReceita(CancellationToken ct)
     {
         var result = await _mediator.Send(new ObterReceitaRequestDto(), ct);

@@ -35,7 +35,7 @@ public class CategoriaController : ControllerBase
     /// <param name="ct"></param>
     /// <returns></returns>
     [HttpGet("totais-categorias")]
-    [ProducesResponseType(typeof(List<TotaisPorCategoriaResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TotaisPorCategoriaResponseDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetReceita(CancellationToken ct)
     {
         var result = await _mediator.Send(new ObterTotaisPorCategoriaRequestDto(), ct);
