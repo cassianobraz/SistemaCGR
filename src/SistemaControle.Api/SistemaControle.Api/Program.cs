@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("*")
+        policy.WithOrigins("GET", "POST", "DELETE")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -21,6 +21,32 @@ builder.Services.AddCors(options =>
 builder.Services.AddServiceCollection(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseCors("CorsPolicy");
+
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        var csp = "default-src 'self'; " +
+                  "object-src 'none'; " +
+                  "script-src 'self' 'unsafe-inline'; " +
+                  "style-src 'self' 'unsafe-inline'; " +
+                  "img-src 'self' data:; " +
+                  "font-src 'self'; " +
+                  "frame-ancestors 'none'; " +
+                  "form-action 'none';";
+
+        context.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
+        context.Response.Headers.TryAdd("X-Frame-Options", "DENY");
+        context.Response.Headers.TryAdd("X-XSS-Protection", "1; mode=block");
+        context.Response.Headers.TryAdd("Referrer-Policy", "no-referrer");
+        context.Response.Headers.TryAdd("Permissions-Policy", "geolocation=(), microphone=(), camera=(), magnetometer=(), gyroscope=(), speaker=(), payment=()");
+        context.Response.Headers.TryAdd("Content-Security-Policy", csp);
+        return Task.CompletedTask;
+    });
+    await next.Invoke();
+});
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
