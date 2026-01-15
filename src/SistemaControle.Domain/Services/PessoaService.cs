@@ -39,7 +39,6 @@ public class PessoaService : IPessoaService
         return ResultViewModel<Guid>.Success(pessoa.Id);
     }
 
-
     public async Task<ResultViewModel<bool>> ExcluirAsync(Guid id, CancellationToken ct)
     {
         var pessoa = await _pessoaRepository.ObterPorIdAsync(id, ct);

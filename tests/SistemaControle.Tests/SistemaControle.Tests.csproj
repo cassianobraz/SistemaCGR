@@ -18,11 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\..\src\SistemaControle.Domain\SistemaControle.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Services\" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
