@@ -1,6 +1,5 @@
-// src/features/categoria/api.ts
 import { apiFetch } from "../../lib/http";
-import type { Categoria, CategoriaCreate } from "./types";
+import type { Categoria, CategoriaCreate, TotaisCategoriasResponse } from "./types";
 
 export function getCategorias(signal?: AbortSignal) {
   return apiFetch<Categoria[]>("/api/Categoria", { signal });
@@ -11,4 +10,8 @@ export function createCategoria(body: CategoriaCreate) {
     method: "POST",
     body: JSON.stringify(body),
   });
+}
+
+export function getTotaisCategorias(signal?: AbortSignal) {
+  return apiFetch<TotaisCategoriasResponse>("/api/Categoria/totais-categorias", { signal });
 }

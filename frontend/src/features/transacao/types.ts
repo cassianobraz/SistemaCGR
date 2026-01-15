@@ -1,18 +1,21 @@
-export type Transacao = {
-  id: string;
-  descricao: string;
-  valor: number;
-  data: string;
-  pessoaId: string;
-  categoriaId: string;
-  tipo?: "Receita" | "Despesa" | string;
-};
+export enum TipoTransacao {
+  Despesa = 1,
+  Receita = 2,
+}
 
 export type TransacaoCreate = {
   descricao: string;
   valor: number;
-  data: string;
-  pessoaId: string;
+  tipo: TipoTransacao;
   categoriaId: string;
-  tipo?: "Receita" | "Despesa";
+  pessoaId: string;
+};
+
+export type Transacao = {
+  id: string;
+  descricao: string;
+  valor: number;
+  tipo: TipoTransacao;
+  categoriaId: string;
+  pessoaId: string;
 };

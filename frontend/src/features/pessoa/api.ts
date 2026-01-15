@@ -1,5 +1,5 @@
 import { apiFetch } from "../../lib/http";
-import type { Pessoa, PessoaCreate, TotalPessoas } from "./types";
+import type { Pessoa, PessoaCreate, TotaisPessoasResponse } from "./types";
 
 export function getPessoas(signal?: AbortSignal) {
   return apiFetch<Pessoa[]>("/api/Pessoa", { signal });
@@ -14,5 +14,5 @@ export function deletePessoa(id: string) {
 }
 
 export function getTotaisPessoas(signal?: AbortSignal) {
-  return apiFetch<TotalPessoas[]>("/api/Pessoa/totais-pessoas", { signal });
+  return apiFetch<TotaisPessoasResponse>("/api/Pessoa/totais-pessoas", { signal });
 }

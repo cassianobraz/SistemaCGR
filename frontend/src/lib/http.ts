@@ -1,3 +1,5 @@
+export type ApiErrorItem = { code: string; message: string };
+
 export class ApiError extends Error {
   readonly status: number;
   readonly details: unknown;
@@ -18,9 +20,20 @@ function joinUrl(base: string, path: string) {
   return `${b}${p}`;
 }
 
-async function safeJson(res: Response): Promise<unknown> {
+async function readBody(res: Response): Promise<unknown> {
+  const ct = res.headers.get("content-type") ?? "";
   const text = await res.text();
+
   if (!text) return null;
+
+  if (ct.includes("application/json")) {
+    try {
+      return JSON.parse(text) as unknown;
+    } catch {
+      return text;
+    }
+  }
+
   try {
     return JSON.parse(text) as unknown;
   } catch {
@@ -28,10 +41,31 @@ async function safeJson(res: Response): Promise<unknown> {
   }
 }
 
-export async function apiFetch<T>(
-  path: string,
-  init?: RequestInit & { signal?: AbortSignal }
-): Promise<T> {
+function extractMessage(details: unknown): string {
+  if (!details) return "Erro";
+
+  if (typeof details === "string") return details;
+
+  if (Array.isArray(details)) {
+    const first = details[ 0 ] as unknown;
+    if (first && typeof first === "object") {
+      const msg = (first as { message?: unknown }).message;
+      const code = (first as { code?: unknown }).code;
+      if (typeof msg === "string" && typeof code === "string") return `${code}: ${msg}`;
+      if (typeof msg === "string") return msg;
+    }
+    return "Erro";
+  }
+
+  if (typeof details === "object") {
+    const msg = (details as { message?: unknown }).message;
+    if (typeof msg === "string") return msg;
+  }
+
+  return "Erro";
+}
+
+export async function apiFetch<T>(path: string, init?: RequestInit & { signal?: AbortSignal }): Promise<T> {
   if (!BASE_URL) throw new Error("VITE_API_BASE_URL não configurado");
 
   const res = await fetch(joinUrl(BASE_URL, path), {
@@ -39,15 +73,12 @@ export async function apiFetch<T>(
     ...init,
   });
 
+  const body = await readBody(res);
+
   if (!res.ok) {
-    const details = await safeJson(res);
-    const msg =
-      typeof details === "object" && details && "message" in details
-        ? String((details as { message?: unknown }).message ?? "Erro")
-        : `Erro HTTP ${res.status}`;
-    throw new ApiError(msg, res.status, details);
+    const msg = extractMessage(body);
+    throw new ApiError(msg, res.status, body);
   }
 
-  const data = (await safeJson(res)) as T;
-  return data;
+  return body as T;
 }

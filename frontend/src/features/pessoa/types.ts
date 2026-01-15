@@ -9,8 +9,17 @@ export type PessoaCreate = {
   idade: number;
 };
 
-export type TotalPessoas = {
-  pessoaId: string;
+export type TotaisPessoaItem = {
+  id: string;
   nome: string;
-  total: number;
+  totalReceitas: number;
+  totalDespesas: number;
+  saldo: number;
+};
+
+export type TotaisPessoasResponse = {
+  result: TotaisPessoaItem[];
+  totalReceitasGeral: number;
+  totalDespesasGeral: number;
+  saldoGeral: number;
 };

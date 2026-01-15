@@ -14,3 +14,18 @@ export type CategoriaCreate = {
   descricao: string;
   finalidade: Finalidade;
 };
+
+export type TotaisCategoriaItem = {
+  id: string;
+  descricao: string;
+  totalReceitas: number;
+  totalDespesas: number;
+  saldo: number;
+};
+
+export type TotaisCategoriasResponse = {
+  categorias: TotaisCategoriaItem[];
+  totalReceitasGeral: number;
+  totalDespesasGeral: number;
+  saldoGeral: number;
+};

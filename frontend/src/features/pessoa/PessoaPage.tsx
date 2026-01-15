@@ -1,77 +1,68 @@
 import { useMemo, useState } from "react";
+import PageHeader from "../../components/ui/PageHeader";
+import TotalsInline from "../../components/ui/TotalsInline";
+import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Table from "../../components/ui/Table";
-import Button from "../../components/ui/Button";
-import Modal from "../../components/ui/Modal";
-import Field from "../../components/ui/Field";
-import { useCreatePessoa, useDeletePessoa, usePessoas, useTotaisPessoas } from "./hooks";
-import type { Pessoa } from "./types";
-import { ApiError } from "../../lib/http";
 import { currencyBRL } from "../../lib/format";
+import { ApiError } from "../../lib/http";
+import { useCreatePessoa, useDeletePessoa, usePessoas, useTotaisPessoas } from "./hooks";
+import type { Pessoa, TotaisPessoaItem } from "./types";
+import PessoaModal from "./PessoaModal";
 
 export default function PessoaPage() {
   const [ open, setOpen ] = useState(false);
-  const [ nome, setNome ] = useState("");
-  const [ idade, setIdade ] = useState<string>("");
 
   const pessoasQ = usePessoas();
   const totaisQ = useTotaisPessoas();
   const createM = useCreatePessoa();
   const deleteM = useDeletePessoa();
 
-  const pessoas = useMemo(() => pessoasQ.data ?? [], [ pessoasQ.data ]);
+  const pessoas = useMemo(() => (Array.isArray(pessoasQ.data) ? pessoasQ.data : []), [ pessoasQ.data ]);
+  const totaisRows = useMemo(
+    () => (totaisQ.data?.result && Array.isArray(totaisQ.data.result) ? totaisQ.data.result : []),
+    [ totaisQ.data ]
+  );
 
-  const errorText = (err: unknown) => {
-    if (err instanceof ApiError) return `${err.message} (HTTP ${err.status})`;
-    return "Erro inesperado";
-  };
-
-  const onClose = () => {
-    setOpen(false);
-    setNome("");
-    setIdade("");
-  };
-
-  const onConfirm = async () => {
-    const n = nome.trim();
-    const i = Number(idade);
-    if (!n) return;
-    if (!Number.isFinite(i) || i < 0) return;
-
-    await createM.mutateAsync({ nome: n, idade: i });
-    onClose();
-  };
+  const errorText = (err: unknown) => (err instanceof ApiError ? err.message : "Erro inesperado");
 
   const onRemove = async (p: Pessoa) => {
-    const ok = window.confirm(`Excluir "${p.nome}"? Isso deve apagar as transações dela (regra do backend).`);
+    const ok = window.confirm(`Excluir "${p.nome}"? Isso apaga as transações dessa pessoa.`);
     if (!ok) return;
     await deleteM.mutateAsync(p.id);
   };
 
   return (
     <div className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-lg font-semibold">Pessoas</h1>
-          <p className="text-sm text-slate-600">GET/POST/DELETE /api/Pessoa + totais</p>
-        </div>
-        <Button onClick={() => setOpen(true)}>Nova pessoa</Button>
-      </div>
+      <PageHeader title="Pessoas" action={<Button onClick={() => setOpen(true)}>Nova pessoa</Button>} />
 
-      <Card title="Totais por pessoa">
+      <Card
+        title="Totais por pessoa"
+        right={
+          totaisQ.data ? (
+            <TotalsInline
+              receitas={totaisQ.data.totalReceitasGeral}
+              despesas={totaisQ.data.totalDespesasGeral}
+              saldo={totaisQ.data.saldoGeral}
+            />
+          ) : null
+        }
+      >
         {totaisQ.isLoading ? (
-          <div className="text-sm text-slate-600">Carregando...</div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">Carregando...</div>
         ) : totaisQ.isError ? (
           <div role="alert" className="text-sm text-red-600">
             {errorText(totaisQ.error)}
           </div>
         ) : (
           <Table
-            rows={totaisQ.data ?? []}
+            rows={totaisRows}
             empty="Sem dados de totais."
             columns={[
-              { key: "nome", header: "Pessoa", cell: (r) => r.nome },
-              { key: "total", header: "Total", className: "text-right", cell: (r) => currencyBRL(r.total) },
+              { key: "nome", header: "Pessoa", cell: (r: TotaisPessoaItem) => <span className="font-medium">{r.nome}</span> },
+              { key: "totalReceitas", header: "Receitas", className: "text-right", cell: (r: TotaisPessoaItem) => currencyBRL(r.totalReceitas) },
+              { key: "totalDespesas", header: "Despesas", className: "text-right", cell: (r: TotaisPessoaItem) => currencyBRL(r.totalDespesas) },
+              { key: "saldo", header: "Saldo", className: "text-right", cell: (r: TotaisPessoaItem) => currencyBRL(r.saldo) },
             ]}
           />
         )}
@@ -79,7 +70,7 @@ export default function PessoaPage() {
 
       <Card title="Listagem">
         {pessoasQ.isLoading ? (
-          <div className="text-sm text-slate-600">Carregando...</div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">Carregando...</div>
         ) : pessoasQ.isError ? (
           <div role="alert" className="text-sm text-red-600">
             {errorText(pessoasQ.error)}
@@ -89,20 +80,15 @@ export default function PessoaPage() {
             rows={pessoas}
             empty="Nenhuma pessoa cadastrada."
             columns={[
-              { key: "nome", header: "Nome", cell: (r) => <span className="font-medium">{r.nome}</span> },
-              { key: "idade", header: "Idade", className: "w-[120px]", cell: (r) => r.idade },
+              { key: "nome", header: "Nome", cell: (r: Pessoa) => <span className="font-medium">{r.nome}</span> },
+              { key: "idade", header: "Idade", className: "w-[120px]", cell: (r: Pessoa) => r.idade },
               {
                 key: "acoes",
                 header: "Ações",
                 className: "w-[140px] text-right",
-                cell: (r) => (
+                cell: (r: Pessoa) => (
                   <div className="flex justify-end">
-                    <Button
-                      variant="danger"
-                      onClick={() => onRemove(r)}
-                      disabled={deleteM.isPending}
-                      aria-label={`Excluir ${r.nome}`}
-                    >
+                    <Button variant="danger" onClick={() => onRemove(r)} disabled={deleteM.isPending}>
                       {deleteM.isPending ? "..." : "Excluir"}
                     </Button>
                   </div>
@@ -111,23 +97,15 @@ export default function PessoaPage() {
             ]}
           />
         )}
-
-        {(deleteM.isError || createM.isError) && (
-          <div role="alert" className="mt-3 text-sm text-red-600">
-            {deleteM.isError ? errorText(deleteM.error) : errorText(createM.error)}
-          </div>
-        )}
       </Card>
 
-      <Modal open={open} title="Criar pessoa" onClose={onClose} onConfirm={onConfirm} busy={createM.isPending}>
-        <div className="grid gap-3">
-          <Field label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-          <Field label="Idade" inputMode="numeric" value={idade} onChange={(e) => setIdade(e.target.value)} />
-          <p className="text-xs text-slate-500">
-            Regra: ao excluir pessoa, as transações dela devem ser apagadas no backend.
-          </p>
-        </div>
-      </Modal>
+      <PessoaModal
+        open={open}
+        onClose={() => setOpen(false)}
+        busy={createM.isPending}
+        error={createM.error}
+        onSubmit={(payload) => createM.mutateAsync(payload)}
+      />
     </div>
   );
 }

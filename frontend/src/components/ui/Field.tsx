@@ -1,28 +1,24 @@
-import { InputHTMLAttributes, ReactNode } from "react";
+import type { ChangeEventHandler } from "react";
 
-type Props = InputHTMLAttributes<HTMLInputElement> & {
+type Props = {
   label: string;
-  error?: string;
-  right?: ReactNode;
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  placeholder?: string;
+  inputMode?: "text" | "numeric" | "decimal" | "email" | "search" | "tel" | "url";
 };
 
-export default function Field({ label, error, right, className = "", ...props }: Props) {
+export default function Field({ label, value, onChange, placeholder, inputMode }: Props) {
   return (
     <label className="grid gap-1">
-      <span className="text-xs font-medium text-slate-700">{label}</span>
-      <div className="relative">
-        <input
-          className={[
-            "w-full rounded-md border px-3 py-2 text-sm",
-            "border-slate-300 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200",
-            error ? "border-red-400 focus:ring-red-100" : "",
-            className,
-          ].join(" ")}
-          {...props}
-        />
-        {right && <div className="absolute right-2 top-1/2 -translate-y-1/2">{right}</div>}
-      </div>
-      {error && <span className="text-xs text-red-600">{error}</span>}
+      <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{label}</span>
+      <input
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        inputMode={inputMode}
+        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-slate-400 focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-800"
+      />
     </label>
   );
 }

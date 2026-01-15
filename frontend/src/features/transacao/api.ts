@@ -6,5 +6,8 @@ export function getTransacoes(signal?: AbortSignal) {
 }
 
 export function createTransacao(body: TransacaoCreate) {
-  return apiFetch<void>("/api/Transacao", { method: "POST", body: JSON.stringify(body) });
+  return apiFetch<void>("/api/Transacao", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 }

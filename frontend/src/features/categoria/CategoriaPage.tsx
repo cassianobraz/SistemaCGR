@@ -1,13 +1,15 @@
 import { useMemo, useState } from "react";
+import PageHeader from "../../components/ui/PageHeader";
+import TotalsInline from "../../components/ui/TotalsInline";
+import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Table from "../../components/ui/Table";
-import Button from "../../components/ui/Button";
-import Modal from "../../components/ui/Modal";
-import Field from "../../components/ui/Field";
-import { useCategorias, useCreateCategoria } from "./hooks";
-import { ApiError } from "../../lib/http";
-import type { Categoria } from "./types";
+import { useCategorias, useCreateCategoria, useTotaisCategorias } from "./hooks";
+import type { Categoria, TotaisCategoriaItem } from "./types";
 import { Finalidade } from "./types";
+import { ApiError } from "../../lib/http";
+import { currencyBRL } from "../../lib/format";
+import CategoriaModal from "./CategoriaModal";
 
 function finalidadeLabel(v: Finalidade) {
   switch (v) {
@@ -24,46 +26,58 @@ function finalidadeLabel(v: Finalidade) {
 
 export default function CategoriaPage() {
   const [ open, setOpen ] = useState(false);
-  const [ descricao, setDescricao ] = useState("");
-  const [ finalidade, setFinalidade ] = useState<Finalidade>(Finalidade.Despesa);
 
   const categoriasQ = useCategorias();
+  const totaisQ = useTotaisCategorias();
   const createM = useCreateCategoria();
 
   const rows = useMemo(() => (Array.isArray(categoriasQ.data) ? categoriasQ.data : []), [ categoriasQ.data ]);
+  const totaisRows = useMemo(
+    () => (totaisQ.data?.categorias && Array.isArray(totaisQ.data.categorias) ? totaisQ.data.categorias : []),
+    [ totaisQ.data ]
+  );
 
-  const errorText = (err: unknown) => {
-    if (err instanceof ApiError) return `${err.message} (HTTP ${err.status})`;
-    return "Erro inesperado";
-  };
-
-  const onClose = () => {
-    setOpen(false);
-    setDescricao("");
-    setFinalidade(Finalidade.Despesa);
-  };
-
-  const onConfirm = async () => {
-    const d = descricao.trim();
-    if (!d) return;
-
-    await createM.mutateAsync({ descricao: d, finalidade });
-    onClose();
-  };
+  const errorText = (err: unknown) => (err instanceof ApiError ? err.message : "Erro inesperado");
 
   return (
     <div className="grid gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-lg font-semibold">Categorias</h1>
-          <p className="text-sm text-slate-600">GET/POST /api/Categoria</p>
-        </div>
-        <Button onClick={() => setOpen(true)}>Nova categoria</Button>
-      </div>
+      <PageHeader title="Categorias" action={<Button onClick={() => setOpen(true)}>Nova categoria</Button>} />
+
+      <Card
+        title="Totais por categoria"
+        right={
+          totaisQ.data ? (
+            <TotalsInline
+              receitas={totaisQ.data.totalReceitasGeral}
+              despesas={totaisQ.data.totalDespesasGeral}
+              saldo={totaisQ.data.saldoGeral}
+            />
+          ) : null
+        }
+      >
+        {totaisQ.isLoading ? (
+          <div className="text-sm text-slate-600 dark:text-slate-300">Carregando...</div>
+        ) : totaisQ.isError ? (
+          <div role="alert" className="text-sm text-red-600">
+            {errorText(totaisQ.error)}
+          </div>
+        ) : (
+          <Table
+            rows={totaisRows}
+            empty="Sem dados de totais."
+            columns={[
+              { key: "descricao", header: "Categoria", cell: (r: TotaisCategoriaItem) => <span className="font-medium">{r.descricao}</span> },
+              { key: "totalReceitas", header: "Receitas", className: "text-right", cell: (r: TotaisCategoriaItem) => currencyBRL(r.totalReceitas) },
+              { key: "totalDespesas", header: "Despesas", className: "text-right", cell: (r: TotaisCategoriaItem) => currencyBRL(r.totalDespesas) },
+              { key: "saldo", header: "Saldo", className: "text-right", cell: (r: TotaisCategoriaItem) => currencyBRL(r.saldo) },
+            ]}
+          />
+        )}
+      </Card>
 
       <Card title="Listagem">
         {categoriasQ.isLoading ? (
-          <div className="text-sm text-slate-600">Carregando...</div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">Carregando...</div>
         ) : categoriasQ.isError ? (
           <div role="alert" className="text-sm text-red-600">
             {errorText(categoriasQ.error)}
@@ -74,44 +88,19 @@ export default function CategoriaPage() {
             empty="Nenhuma categoria cadastrada."
             columns={[
               { key: "descricao", header: "Descrição", cell: (r: Categoria) => <span className="font-medium">{r.descricao}</span> },
-              { key: "finalidade", header: "Finalidade", cell: (r: Categoria) => finalidadeLabel(r.finalidade) },
-              { key: "id", header: "Id", className: "text-slate-500", cell: (r: Categoria) => r.id },
+              { key: "finalidade", header: "Finalidade", className: "w-[160px]", cell: (r: Categoria) => finalidadeLabel(r.finalidade) },
             ]}
           />
         )}
       </Card>
 
-      <Modal
+      <CategoriaModal
         open={open}
-        title="Criar categoria"
-        onClose={onClose}
-        onConfirm={onConfirm}
+        onClose={() => setOpen(false)}
         busy={createM.isPending}
-        confirmText="Salvar"
-      >
-        <div className="grid gap-3">
-          <Field label="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} />
-
-          <label className="grid gap-1">
-            <span className="text-xs font-medium text-slate-700">Finalidade</span>
-            <select
-              value={finalidade}
-              onChange={(e) => setFinalidade(Number(e.target.value) as Finalidade)}
-              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-            >
-              <option value={Finalidade.Despesa}>Despesa</option>
-              <option value={Finalidade.Receita}>Receita</option>
-              <option value={Finalidade.Ambas}>Ambas</option>
-            </select>
-          </label>
-
-          {createM.isError && (
-            <div role="alert" className="text-sm text-red-600">
-              {errorText(createM.error)}
-            </div>
-          )}
-        </div>
-      </Modal>
+        error={createM.error}
+        onSubmit={(payload) => createM.mutateAsync(payload)}
+      />
     </div>
   );
 }
