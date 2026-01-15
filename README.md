@@ -1,4 +1,4 @@
-﻿# 📊 Sistema de Controle Financeiro
+﻿# 📊 Sistema de controle de gastos residenciais
 
 Projeto backend desenvolvido com foco em **boas práticas**, **regras de negócio bem definidas** e **testes unitários consistentes**.  
 O sistema permite o controle de pessoas, categorias e transações financeiras, além de consultas consolidadas de totais.
