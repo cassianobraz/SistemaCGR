@@ -5,7 +5,7 @@ namespace SistemaControle.Domain.Services.Interfaces;
 
 public interface ITransacoesService
 {
-    Task<ResultViewModel<bool>> CriarAsync(string descricao, 
+    Task<ResultViewModel<Guid>> CriarAsync(string descricao, 
                                            decimal valor, 
                                            TipoTransacao tipo, 
                                            Guid categoriaId, 

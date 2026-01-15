@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SistemaControle.Application.Pessoa.Dtos.Requests;
+using SistemaControle.Application.Categoria.Dtos.Requests;
 using SistemaControle.Domain.Models.CategoriaAggregate;
 using SistemaControle.Domain.Models.PessoaAggregate;
 using SistemaControle.Domain.Models.TransacoesAggregate;
@@ -49,6 +49,6 @@ public static class ServiceCollectionExtension
 
     private static void AddHandlers(this IServiceCollection services)
     {
-        services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<CriarPessoaRequestDto>());
+        services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<ObterCategoriasRequestDto>());
     }
 }

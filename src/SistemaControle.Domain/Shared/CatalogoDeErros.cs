@@ -10,6 +10,10 @@ public class CatalogoDeErros
     public static string ValorTransacaoInvalida => "CGR0006";
     public static string CategoriaTransacaoNull => "CGR0007";
     public static string PessoaTransacaoNull => "CGR0008";
+    public static string PessoaMenorIdadeSomenteDespesa => "CGR0009";
+    public static string CategoriaFinalidadeInvalidaParaTipoTransacao => "CGR0010";
+    public static string NomePessoaInvalido => "CGR0011";
+    public static string IdadePessoaInvalida => "CGR0012";
 
     public static string ObterMensagem(string codigoErro) => Resources.ResourceManager.GetString(codigoErro) ?? "Erro Interno";
 }

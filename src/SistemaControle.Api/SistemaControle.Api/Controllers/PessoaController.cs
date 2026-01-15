@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Result.Domain.Models;
 using SistemaControle.Application.Pessoa.Dtos;
 using SistemaControle.Application.Pessoa.Dtos.Requests;
+using SistemaControle.Application.Pessoa.Dtos.Responses;
 
 namespace SistemaControle.Api.Controllers;
 
@@ -15,25 +16,6 @@ public class PessoaController : ControllerBase
         => _mediator = mediator;
 
     /// <summary>
-    /// Cadastrar uma pessoa no banco.
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="ct"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(List<Error>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CriarPessoaRequestDto request, CancellationToken ct)
-    {
-        var result = await _mediator.Send(request, ct);
-
-        if (result.IsFailure)
-            return BadRequest(result.Errors);
-
-        return NoContent();
-    }
-
-    /// <summary>
     /// Buscar todas as pessoas cadastradas no banco.
     /// </summary>
     /// <param name="ct"></param>
@@ -44,9 +26,40 @@ public class PessoaController : ControllerBase
     {
         var result = await _mediator.Send(new ObterPessoasRequestDto(), ct);
 
-        var categorias = result.Value?.Result ?? new List<PessoaDto>();
+        return Ok(result.Value.Result);
+    }
 
-        return Ok(categorias);
+    /// <summary>
+    /// Buscar o total de receitas, despesas e saldo.
+    /// </summary>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    [HttpGet("totais-pessoas")]
+    [ProducesResponseType(typeof(List<ConsultaTotaisPorPessoaDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetReceita(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new ObterReceitaRequestDto(), ct);
+
+        return Ok(result.Value);
+    }
+
+    /// <summary>
+    /// Cadastrar uma pessoa no banco.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(CriarPessoaResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<Error>), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create([FromBody] CriarPessoaRequestDto request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(request, ct);
+
+        if (result.IsFailure)
+            return BadRequest(result.Errors);
+
+        return Ok(result.Value);
     }
 
     /// <summary>

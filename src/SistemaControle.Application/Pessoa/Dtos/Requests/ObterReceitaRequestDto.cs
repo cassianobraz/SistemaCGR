@@ -4,8 +4,6 @@ using SistemaControle.Application.Pessoa.Dtos.Responses;
 
 namespace SistemaControle.Application.Pessoa.Dtos.Requests;
 
-public class CriarPessoaRequestDto : IRequest<ResultViewModel<CriarPessoaResponseDto>>
+public class ObterReceitaRequestDto : IRequest<ResultViewModel<PessoaReceitaResponseDto>>
 {
-    public string? Nome { get; set; }
-    public int Idade { get; set; }
 }

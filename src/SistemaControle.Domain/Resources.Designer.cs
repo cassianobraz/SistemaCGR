@@ -131,5 +131,41 @@ namespace SistemaControle.Domain {
                 return ResourceManager.GetString("CGR0008", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pessoa menor de idade só pode cadastrar despesa..
+        /// </summary>
+        public static string CGR0009 {
+            get {
+                return ResourceManager.GetString("CGR0009", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A categoria selecionada não pode ser utilizada para o tipo de transação informado. Verifique a finalidade da categoria..
+        /// </summary>
+        public static string CGR0010 {
+            get {
+                return ResourceManager.GetString("CGR0010", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to O nome da pessoa é obrigatório e não pode estar vazio..
+        /// </summary>
+        public static string CGR0011 {
+            get {
+                return ResourceManager.GetString("CGR0011", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A idade informada é inválida. Informe um valor entre 0 e 120 anos..
+        /// </summary>
+        public static string CGR0012 {
+            get {
+                return ResourceManager.GetString("CGR0012", resourceCulture);
+            }
+        }
     }
 }

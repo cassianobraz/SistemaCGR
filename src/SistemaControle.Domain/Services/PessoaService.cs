@@ -16,21 +16,29 @@ public class PessoaService : IPessoaService
         _pessoaRepository = pessoaRepository;
         _unitOfWork = unitOfWork;
     }
-    public async Task<ResultViewModel<bool>> CriarAsync(string nome, int idade, CancellationToken ct)
+
+    public async Task<ResultViewModel<Guid>> CriarAsync(string nome, int idade, CancellationToken ct)
     {
-        if (nome is null)
+        if (string.IsNullOrWhiteSpace(nome))
         {
-            var erros = new List<Error> { new(DescricaoCategoriaNull, ObterMensagem(DescricaoCategoriaNull)) };
-            return ResultViewModel<bool>.Failure(erros, TipoErro.Domain);
+            var erros = new List<Error> { new(NomePessoaInvalido, ObterMensagem(NomePessoaInvalido)) };
+            return ResultViewModel<Guid>.Failure(erros, TipoErro.Domain);
         }
 
-        var CriarCategoria = Pessoa.Create(nome, idade);
+        if (idade <= 0 || idade > 120)
+        {
+            var erros = new List<Error> { new(IdadePessoaInvalida, ObterMensagem(IdadePessoaInvalida)) };
+            return ResultViewModel<Guid>.Failure(erros, TipoErro.Domain);
+        }
 
-        await _pessoaRepository.CriarAsync(CriarCategoria, ct);
+        var pessoa = Pessoa.Create(nome, idade);
+
+        await _pessoaRepository.CriarAsync(pessoa, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return ResultViewModel<bool>.Success(true);
+        return ResultViewModel<Guid>.Success(pessoa.Id);
     }
+
 
     public async Task<ResultViewModel<bool>> ExcluirAsync(Guid id, CancellationToken ct)
     {

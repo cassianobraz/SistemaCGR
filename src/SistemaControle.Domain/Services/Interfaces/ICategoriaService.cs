@@ -5,5 +5,5 @@ namespace SistemaControle.Domain.Services.Interfaces;
 
 public interface ICategoriaService
 {
-    Task<ResultViewModel<bool>> CriarAsync(string descricao, Finalidade finalidade, CancellationToken ct);
+    Task<ResultViewModel<Guid>> CriarAsync(string descricao, Finalidade finalidade, CancellationToken ct);
 }

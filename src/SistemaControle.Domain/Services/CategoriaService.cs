@@ -18,25 +18,25 @@ public class CategoriaService : ICategoriaService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResultViewModel<bool>> CriarAsync(string descricao, Finalidade finalidade, CancellationToken ct)
+    public async Task<ResultViewModel<Guid>> CriarAsync(string descricao, Finalidade finalidade, CancellationToken ct)
     {
-        if (descricao is null)
+        if (string.IsNullOrWhiteSpace(descricao))
         {
             var erros = new List<Error> { new(DescricaoCategoriaNull, ObterMensagem(DescricaoCategoriaNull)) };
-            return ResultViewModel<bool>.Failure(erros, TipoErro.Domain);
+            return ResultViewModel<Guid>.Failure(erros, TipoErro.Domain);
         }
 
         if (!Enum.IsDefined(typeof(Finalidade), finalidade))
         {
             var erros = new List<Error> { new(FinalidadeCategoriaInvalida, ObterMensagem(FinalidadeCategoriaInvalida)) };
-            return ResultViewModel<bool>.Failure(erros, TipoErro.Domain);
+            return ResultViewModel<Guid>.Failure(erros, TipoErro.Domain);
         }
 
-        var CriarCategoria = Categoria.Create(descricao, finalidade);
+        var categoria = Categoria.Create(descricao.Trim(), finalidade);
 
-        await _categoriaRepository.CriarAsync(CriarCategoria, ct);
+        await _categoriaRepository.CriarAsync(categoria, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return ResultViewModel<bool>.Success(true);
+        return ResultViewModel<Guid>.Success(categoria.Id);
     }
 }
