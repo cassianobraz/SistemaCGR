@@ -4,6 +4,12 @@ using SistemaControle.Infra.EF.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrWhiteSpace(port))
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -12,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.WithOrigins("GET", "POST", "DELETE")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -28,14 +34,7 @@ app.Use(async (context, next) =>
 {
     context.Response.OnStarting(() =>
     {
-        var csp = "default-src 'self'; " +
-                  "object-src 'none'; " +
-                  "script-src 'self' 'unsafe-inline'; " +
-                  "style-src 'self' 'unsafe-inline'; " +
-                  "img-src 'self' data:; " +
-                  "font-src 'self'; " +
-                  "frame-ancestors 'none'; " +
-                  "form-action 'none';";
+        var csp = "default-src 'self'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'none'; form-action 'none';";
 
         context.Response.Headers.TryAdd("X-Content-Type-Options", "nosniff");
         context.Response.Headers.TryAdd("X-Frame-Options", "DENY");
@@ -64,7 +63,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 // Fazer as migrations automaticamente ao iniciar a aplicação
