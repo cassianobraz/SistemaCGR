@@ -1,11 +1,11 @@
-﻿# 📊 Sistema de controle de gastos residenciais
+﻿# Sistema de controle de gastos residenciais
 
 Projeto backend desenvolvido com foco em **boas práticas**, **regras de negócio bem definidas** e **testes unitários consistentes**.  
 O sistema permite o controle de pessoas, categorias e transações financeiras, além de consultas consolidadas de totais.
 
 ---
 
-## 🧠 Visão Geral
+##  Visão Geral
 
 O sistema oferece:
 
@@ -21,7 +21,7 @@ O foco principal do projeto é **qualidade de código**, **organização** e **c
 
 ---
 
-## 🏗️ Arquitetura
+##  Arquitetura
 
 O projeto segue uma separação clara de camadas, inspirada em princípios de Clean Architecture, facilitando manutenção, testes e evolução do sistema.
 
@@ -39,7 +39,7 @@ tests/
             └── Services
 ```
 
-### 📌 Responsabilidade das Camadas
+###  Responsabilidade das Camadas
 
 - **Api**
   - Controllers
@@ -66,16 +66,16 @@ tests/
 
 ---
 
-## 📚 Regras de Negócio
+##  Regras de Negócio
 
-### 👤 Pessoa
+###  Pessoa
 - Nome é obrigatório
 - Idade deve estar entre **1 e 120**
 - Só é possível excluir uma pessoa existente
 
 ---
 
-### 🗂️ Categoria
+###  Categoria
 - Descrição obrigatória
 - Finalidade válida:
   - `Despesa`
@@ -84,7 +84,7 @@ tests/
 
 ---
 
-### 💰 Transações
+###  Transações
 
 As regras abaixo são aplicadas exclusivamente no **serviço de domínio**:
 
@@ -101,9 +101,9 @@ As regras abaixo são aplicadas exclusivamente no **serviço de domínio**:
 
 ---
 
-## 📊 Consultas
+##  Consultas
 
-### 🔹 Totais por Pessoa
+###  Totais por Pessoa
 Retorna:
 - Lista de pessoas com:
   - Total de receitas
@@ -116,7 +116,7 @@ Retorna:
 
 ---
 
-### 🔹 Totais por Categoria
+###  Totais por Categoria
 Retorna:
 - Lista de categorias com:
   - Total de receitas
@@ -126,7 +126,7 @@ Retorna:
 
 ---
 
-## 🧪 Testes Unitários
+##  Testes Unitários
 
 Os testes foram desenvolvidos utilizando **xUnit** e **Moq**, focando diretamente nas **regras de negócio**.
 
@@ -137,7 +137,7 @@ Os testes foram desenvolvidos utilizando **xUnit** e **Moq**, focando diretament
 - Cobertura de cenários de erro e sucesso
 - Validação de regras condicionais (idade, finalidade, tipo de transação)
 
-### 📈 Cobertura
+###  Cobertura
 - **96% de cobertura de linhas**
 - Mais de **500 linhas cobertas**
 - Todos os fluxos críticos do domínio estão testados
@@ -146,7 +146,7 @@ Esse nível de cobertura garante maior segurança para evolução do código e r
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **.NET 8**
 - **C#**
@@ -159,7 +159,7 @@ Esse nível de cobertura garante maior segurança para evolução do código e r
 
 ---
 
-## 🎯 Objetivo do Projeto
+##  Objetivo do Projeto
 
 Este projeto foi desenvolvido com o objetivo de:
 
@@ -172,7 +172,7 @@ Mesmo sendo um projeto simples, a preocupação principal foi desenvolver algo *
 
 ---
 
-## 📌 Considerações Finais
+##  Considerações Finais
 
 O projeto prioriza **clareza e consistência**, simulando situações comuns do dia a dia de um backend.  
 Todas as decisões foram pensadas para facilitar manutenção, testes e evolução futura.

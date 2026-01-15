@@ -6,7 +6,7 @@ using SistemaControle.Domain.Shared;
 using SistemaControle.Domain.Shared.Enums;
 using static SistemaControle.Domain.Shared.CatalogoDeErros;
 
-namespace SistemaControle.Tests.Unit.Domain.Services;
+namespace SistemaControle.UnitTests.Domain.Services;
 
 public sealed class CategoriaTests
 {
