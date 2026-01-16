@@ -148,7 +148,7 @@ Esse nível de cobertura garante maior segurança para evolução do código e r
 
 ##  Tecnologias Utilizadas
 
-- **.NET 8**
+- **.NET 9**
 - **C#**
 - **ASP.NET Core**
 - **Entity Framework Core**
@@ -171,6 +171,20 @@ Este projeto foi desenvolvido com o objetivo de:
 Mesmo sendo um projeto simples, a preocupação principal foi desenvolver algo **bem estruturado**, **testável** e **fácil de manter**.
 
 ---
+
+## Infraestrutura e Deploy
+
+O projeto está publicado utilizando serviços gratuitos, com foco em simplicidade e baixo custo:
+
+- **Backend**: hospedado na plataforma Render
+- **Banco de dados**: PostgreSQL hospedado no Neon
+- **Ambiente**: variáveis sensíveis configuradas via variáveis de ambiente
+
+Por se tratar de serviços gratuitos, podem ocorrer limitações como:
+- Cold start no backend após períodos de inatividade
+- Limites de conexões simultâneas no banco de dados
+
+Essas decisões foram tomadas visando facilitar o deploy e permitir acesso público para avaliação do projeto.
 
 ##  Considerações Finais
 
