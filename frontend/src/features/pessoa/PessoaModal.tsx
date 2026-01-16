@@ -12,6 +12,12 @@ type Props = {
   error?: unknown;
 };
 
+function capitalizeFirst(text: string): string {
+  const t = text.trim();
+  if (!t) return "";
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
 export default function PessoaModal({ open, onClose, onSubmit, busy, error }: Props) {
   const [ nome, setNome ] = useState("");
   const [ idade, setIdade ] = useState("");
@@ -25,7 +31,7 @@ export default function PessoaModal({ open, onClose, onSubmit, busy, error }: Pr
   };
 
   const confirm = async () => {
-    const n = nome.trim();
+    const n = capitalizeFirst(nome);
     const i = Number(idade);
 
     if (!n) return;
@@ -38,9 +44,24 @@ export default function PessoaModal({ open, onClose, onSubmit, busy, error }: Pr
   return (
     <Modal open={open} title="Criar pessoa" onClose={close} onConfirm={confirm} busy={busy}>
       <div className="grid gap-3">
-        <Field label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Ex: Cassiano" />
-        <Field label="Idade" value={idade} onChange={(e) => setIdade(e.target.value)} inputMode="numeric" placeholder="Ex: 30" />
-        {errorText ? <div role="alert" className="text-sm text-red-600">{errorText}</div> : null}
+        <Field
+          label="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          placeholder="Ex: Cassiano"
+        />
+        <Field
+          label="Idade"
+          value={idade}
+          onChange={(e) => setIdade(e.target.value)}
+          inputMode="numeric"
+          placeholder="Ex: 30"
+        />
+        {errorText ? (
+          <div role="alert" className="text-sm text-red-600">
+            {errorText}
+          </div>
+        ) : null}
       </div>
     </Modal>
   );

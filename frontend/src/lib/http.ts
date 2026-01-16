@@ -73,6 +73,8 @@ export async function apiFetch<T>(path: string, init?: RequestInit & { signal?: 
     ...init,
   });
 
+  console.log(res);
+
   const body = await readBody(res);
 
   if (!res.ok) {

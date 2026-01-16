@@ -13,6 +13,12 @@ type Props = {
   error?: unknown;
 };
 
+function capitalizeFirst(text: string): string {
+  const t = text.trim();
+  if (!t) return "";
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
 export default function CategoriaModal({ open, onClose, onSubmit, busy, error }: Props) {
   const [ descricao, setDescricao ] = useState("");
   const [ finalidade, setFinalidade ] = useState<Finalidade>(Finalidade.Despesa);
@@ -26,7 +32,7 @@ export default function CategoriaModal({ open, onClose, onSubmit, busy, error }:
   };
 
   const confirm = async () => {
-    const d = descricao.trim();
+    const d = capitalizeFirst(descricao);
     if (!d) return;
 
     await onSubmit({ descricao: d, finalidade });
@@ -36,7 +42,12 @@ export default function CategoriaModal({ open, onClose, onSubmit, busy, error }:
   return (
     <Modal open={open} title="Criar categoria" onClose={close} onConfirm={confirm} busy={busy}>
       <div className="grid gap-3">
-        <Field label="Descrição" value={descricao} onChange={(e) => setDescricao(e.target.value)} placeholder="Ex: Salário" />
+        <Field
+          label="Descrição"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          placeholder="Ex: Salário"
+        />
 
         <Select
           label="Finalidade"
@@ -49,7 +60,11 @@ export default function CategoriaModal({ open, onClose, onSubmit, busy, error }:
           ]}
         />
 
-        {errorText ? <div role="alert" className="text-sm text-red-600">{errorText}</div> : null}
+        {errorText ? (
+          <div role="alert" className="text-sm text-red-600">
+            {errorText}
+          </div>
+        ) : null}
       </div>
     </Modal>
   );
