@@ -8,13 +8,13 @@ import { currencyBRL } from "../../lib/format";
 import { useCategorias } from "../categoria/hooks";
 import { usePessoas } from "../pessoa/hooks";
 import { useCreateTransacao, useTransacoes } from "./hooks";
-import type { Transacao } from "./types";
+import type { Transacao, TransacaoCreate, TipoTransacao as TipoTransacaoType } from "./types";
 import { TipoTransacao } from "./types";
 import TransacaoModal from "./TransacaoModal";
 import type { Pessoa } from "../pessoa/types";
 import type { Categoria } from "../categoria/types";
 
-function tipoLabel(v: TipoTransacao) {
+function tipoLabel(v: TipoTransacaoType) {
   switch (v) {
     case TipoTransacao.Despesa:
       return "Despesa";
@@ -61,8 +61,7 @@ export default function TransacaoPage() {
     return map;
   }, [ categorias ]);
 
-  const errorText = (err: unknown) =>
-    err instanceof ApiError ? err.message : "Erro inesperado";
+  const errorText = (err: unknown) => (err instanceof ApiError ? err.message : "Erro inesperado");
 
   const isLoadingAny = transacoesQ.isLoading || pessoasQ.isLoading || categoriasQ.isLoading;
   const isErrorAny = transacoesQ.isError || pessoasQ.isError || categoriasQ.isError;
@@ -74,16 +73,11 @@ export default function TransacaoPage() {
 
   return (
     <div className="grid gap-4">
-      <PageHeader
-        title="Transações"
-        action={<Button onClick={() => setOpen(true)}>Nova transação</Button>}
-      />
+      <PageHeader title="Transações" action={<Button onClick={() => setOpen(true)}>Nova transação</Button>} />
 
       <Card title="Listagem">
         {isLoadingAny ? (
-          <div className="text-sm text-slate-600 dark:text-slate-300">
-            Carregando...
-          </div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">Carregando...</div>
         ) : isErrorAny ? (
           <div role="alert" className="text-sm text-red-600">
             {errorText(errorAny)}
@@ -93,37 +87,11 @@ export default function TransacaoPage() {
             rows={transacoes}
             empty="Nenhuma transação cadastrada."
             columns={[
-              {
-                key: "descricao",
-                header: "Descrição",
-                cell: (r: Transacao) => (
-                  <span className="font-medium">{r.descricao}</span>
-                ),
-              },
-              {
-                key: "tipo",
-                header: "Tipo",
-                className: "w-[140px]",
-                cell: (r: Transacao) => tipoLabel(r.tipo),
-              },
-              {
-                key: "valor",
-                header: "Valor",
-                className: "w-[160px] text-right",
-                cell: (r: Transacao) => currencyBRL(r.valor),
-              },
-              {
-                key: "pessoa",
-                header: "Pessoa",
-                className: "w-[220px]",
-                cell: (r: Transacao) => pessoaById.get(r.pessoaId)?.nome ?? "—",
-              },
-              {
-                key: "categoria",
-                header: "Categoria",
-                className: "w-[220px]",
-                cell: (r: Transacao) => categoriaById.get(r.categoriaId)?.descricao ?? "—",
-              },
+              { key: "descricao", header: "Descrição", cell: (r: Transacao) => <span className="font-medium">{r.descricao}</span> },
+              { key: "tipo", header: "Tipo", className: "w-[140px]", cell: (r: Transacao) => tipoLabel(r.tipo) },
+              { key: "valor", header: "Valor", className: "w-[160px] text-right", cell: (r: Transacao) => currencyBRL(r.valor) },
+              { key: "pessoa", header: "Pessoa", className: "w-[220px]", cell: (r: Transacao) => pessoaById.get(r.pessoaId)?.nome ?? "—" },
+              { key: "categoria", header: "Categoria", className: "w-[220px]", cell: (r: Transacao) => categoriaById.get(r.categoriaId)?.descricao ?? "—" },
             ]}
           />
         )}
@@ -136,7 +104,7 @@ export default function TransacaoPage() {
         error={createM.error}
         pessoas={pessoas}
         categorias={categorias}
-        onSubmit={(payload) => createM.mutateAsync(payload)}
+        onSubmit={(payload: TransacaoCreate) => createM.mutateAsync(payload)}
       />
     </div>
   );

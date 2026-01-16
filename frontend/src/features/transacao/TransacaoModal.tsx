@@ -2,16 +2,18 @@ import { useMemo, useState } from "react";
 import Modal from "../../components/ui/Modal";
 import Field from "../../components/ui/Field";
 import { ApiError } from "../../lib/http";
-import { useCategorias } from "../categoria/hooks";
 import type { Categoria, Finalidade as FinalidadeCategoria } from "../categoria/types";
-import { usePessoas } from "../pessoa/hooks";
 import type { Pessoa } from "../pessoa/types";
-import { useCreateTransacao } from "./hooks";
-import { TipoTransacao, type TipoTransacao as TipoTransacaoType } from "./types";
+import { TipoTransacao, type TipoTransacao as TipoTransacaoType, type TransacaoCreate } from "./types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
+  busy?: boolean;
+  error?: unknown;
+  pessoas: Pessoa[];
+  categorias: Categoria[];
+  onSubmit: (payload: TransacaoCreate) => Promise<void>;
 };
 
 function capitalizeFirst(text: string): string {
@@ -28,16 +30,26 @@ function parseTipoTransacao(v: string): TipoTransacaoType | "" {
 
 function isCategoriaCompativel(c: Categoria, tipo: TipoTransacaoType): boolean {
   if (tipo === TipoTransacao.Despesa) {
-    return c.finalidade === (1 as FinalidadeCategoria) || c.finalidade === (3 as FinalidadeCategoria);
+    return (
+      c.finalidade === (1 as FinalidadeCategoria) ||
+      c.finalidade === (3 as FinalidadeCategoria)
+    );
   }
-  return c.finalidade === (2 as FinalidadeCategoria) || c.finalidade === (3 as FinalidadeCategoria);
+  return (
+    c.finalidade === (2 as FinalidadeCategoria) ||
+    c.finalidade === (3 as FinalidadeCategoria)
+  );
 }
 
-export default function TransacaoModal({ open, onClose }: Props) {
-  const pessoasQ = usePessoas();
-  const categoriasQ = useCategorias();
-  const createM = useCreateTransacao();
-
+export default function TransacaoModal({
+  open,
+  onClose,
+  busy,
+  error,
+  pessoas,
+  categorias,
+  onSubmit,
+}: Props) {
   const [ descricao, setDescricao ] = useState("");
   const [ valor, setValor ] = useState("");
   const [ pessoaId, setPessoaId ] = useState("");
@@ -51,10 +63,6 @@ export default function TransacaoModal({ open, onClose }: Props) {
     setTipo("");
     setCategoriaId("");
   };
-
-  const pessoas = useMemo<Pessoa[]>(() => (Array.isArray(pessoasQ.data) ? pessoasQ.data : []), [ pessoasQ.data ]);
-
-  const categorias = useMemo<Categoria[]>(() => (Array.isArray(categoriasQ.data) ? categoriasQ.data : []), [ categoriasQ.data ]);
 
   const pessoaSelecionada = useMemo<Pessoa | null>(() => {
     if (!pessoaId) return null;
@@ -107,7 +115,7 @@ export default function TransacaoModal({ open, onClose }: Props) {
     if (!categoriaId) return;
     if (!Number.isFinite(v) || v <= 0) return;
 
-    await createM.mutateAsync({
+    await onSubmit({
       descricao: d,
       valor: v,
       tipo: tipoEfetivo,
@@ -119,7 +127,13 @@ export default function TransacaoModal({ open, onClose }: Props) {
   };
 
   return (
-    <Modal open={open} title="Criar transação" onClose={handleClose} onConfirm={onConfirm} busy={createM.isPending}>
+    <Modal
+      open={open}
+      title="Criar transação"
+      onClose={handleClose}
+      onConfirm={onConfirm}
+      busy={busy}
+    >
       <div className="grid gap-3">
         <Field
           label="Descrição"
@@ -147,7 +161,11 @@ export default function TransacaoModal({ open, onClose }: Props) {
               Selecione...
             </option>
             {pessoas.map((p) => (
-              <option key={p.id} value={p.id} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+              <option
+                key={p.id}
+                value={p.id}
+                className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+              >
                 {p.nome}
               </option>
             ))}
@@ -171,12 +189,18 @@ export default function TransacaoModal({ open, onClose }: Props) {
               {!pessoaId ? "Selecione uma pessoa primeiro" : isMenor ? "Menor de idade: apenas despesa" : "Selecione..."}
             </option>
 
-            <option value={TipoTransacao.Despesa} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+            <option
+              value={TipoTransacao.Despesa}
+              className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+            >
               Despesa
             </option>
 
             {!isMenor && (
-              <option value={TipoTransacao.Receita} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+              <option
+                value={TipoTransacao.Receita}
+                className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+              >
                 Receita
               </option>
             )}
@@ -201,7 +225,11 @@ export default function TransacaoModal({ open, onClose }: Props) {
             </option>
 
             {categoriasFiltradas.map((c) => (
-              <option key={c.id} value={c.id} className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+              <option
+                key={c.id}
+                value={c.id}
+                className="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100"
+              >
                 {c.descricao}
               </option>
             ))}
@@ -214,11 +242,11 @@ export default function TransacaoModal({ open, onClose }: Props) {
           </div>
         )}
 
-        {createM.isError && (
+        {error ? (
           <div role="alert" className="text-sm text-red-600">
-            {errorText(createM.error)}
+            {errorText(error)}
           </div>
-        )}
+        ) : null}
       </div>
     </Modal>
   );
