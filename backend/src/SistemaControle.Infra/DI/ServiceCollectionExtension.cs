@@ -25,7 +25,7 @@ public static class ServiceCollectionExtension
     }
     private static void AddDbContextConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<SistemaControleContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<SistemaControleContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }
 
     #region Repositorios

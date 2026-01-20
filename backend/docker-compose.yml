@@ -1,0 +1,35 @@
+services:
+  api:
+    container_name: SistemaControle
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      -  4652:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on: ["financeiro-api-sql"]
+    networks:
+      financeiro-network:
+  
+
+  financeiro-api-sql:
+    image: mcr.microsoft.com/azure-sql-edge
+    environment:
+      - "ACCEPT_EULA=1"
+      - "MSSQL_SA_PASSWORD=financeiro1@"
+    volumes:
+      - "financeiro-api-mssql-azure-edge:/var/opt/mssql"
+    networks:
+      financeiro-network:
+        aliases:
+          - "sql" 
+  
+
+volumes:
+  financeiro-api-mssql-azure-edge:
+    
+
+networks:
+  financeiro-network:
+    driver: bridge
